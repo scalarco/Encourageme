@@ -4,5 +4,10 @@
     <string name="app_name">EncourageMe</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="title_activity_splash">Splash</string>
+    <string name="ok">OK</string>
+    <string name="whatsNewTitle">Welcome</string>
+    <string name="whatsNewText">Welcome to EncourageMe!\n To use simply choose your preferences and click ok</string>
 
 </resources>
