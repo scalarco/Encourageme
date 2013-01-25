@@ -9,5 +9,15 @@
     <string name="ok">OK</string>
     <string name="whatsNewTitle">Welcome</string>
     <string name="whatsNewText">Welcome to EncourageMe!\n To use simply choose your preferences and click ok</string>
-
+	
+    <string name="frequency_prompt">Select frequency of encouragements</string>
+ 
+    <string-array name="freq_array">
+        <item>Once a day</item>
+        <item>Twice a day</item>
+        <item>Every 8 hours</item>
+        <item>Every 4 hours</item>
+        <item>Every 2 hours</item>
+        <item>Every hour</item>
+    </string-array>
 </resources>

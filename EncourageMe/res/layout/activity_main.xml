@@ -1,16 +1,101 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:gravity="top"
+    android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	android:background="#000000"
     tools:context=".MainActivity" >
+	<RelativeLayout android:id="@+id/settingsPage"
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#000000"
+		android:visibility="visible">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="145dp"
-        android:text="@string/hello_world" />
+		    <TimePicker
+		        android:id="@+id/timePicker1"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+		    <Button
+		        android:id="@+id/btnSetStart"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/timePicker1"
+		        android:text="Set Start Time" />
+
+		    <TimePicker
+		        android:id="@+id/timePicker2"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/btnSetStart" />
+
+		    <Button
+		        android:id="@+id/btnSetEnd"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/timePicker2"
+		        android:text="Set End Time" />
+		    
+		    <Spinner
+       		android:id="@+id/freqSpinner"
+       		android:layout_width="match_parent"
+        	android:layout_height="wrap_content"
+        	android:layout_below="@+id/btnSetEnd"
+        	android:entries="@array/freq_array"
+        	android:prompt="@string/frequency_prompt" />
+		    
+		    
+		    
+		    <Button
+		        android:id="@+id/setEncourage"
+		        android:layout_width="wrap_content"
+		        android:layout_height="wrap_content"
+		        android:layout_below="@+id/freqSpinner"
+		        android:onClick="configP"
+		        android:text="Set EncourageMe" />
+
+
+	</RelativeLayout>
+	<RelativeLayout
+	    android:id="@+id/configPage"
+	    android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:background="#000000"
+		android:visibility="gone">
+		    	<Button
+		        	android:id="@+id/btnEdit"
+		        	android:layout_width="wrap_content"
+		        	android:layout_height="wrap_content"
+		        	android:layout_alignParentLeft="true"
+		        	android:onClick="settingsP"
+		        	android:text="Edit" />
+					<TextView 
+			    	android:id="@+id/currStart"
+			    	android:gravity="top"
+			    	android:layout_alignParentLeft="true"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/btnEdit"
+					android:textColor="#FF3300"
+					android:padding="10px"
+					android:textSize="30px"/>
+					<TextView 
+			   	 	android:id="@+id/currEnd"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/currStart"
+					android:textColor="#FF3300"
+					android:padding="10px"
+					android:layout_alignParentLeft="true"
+					android:textSize="30px"/>
+					<TextView 
+			    	android:id="@+id/currFreq"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/currEnd"
+					android:textColor="#FF3300"
+					android:layout_alignParentLeft="true"
+					android:padding="10px"
+					android:textSize="30px"/>
+					
+	</RelativeLayout>
+</LinearLayout>
