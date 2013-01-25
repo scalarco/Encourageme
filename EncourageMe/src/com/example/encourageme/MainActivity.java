@@ -34,7 +34,7 @@ public class MainActivity extends Activity {
 
 	private RelativeLayout settingsPage;
 	private RelativeLayout configPage;
-	private TextView currStartTV, currEndTV, freqTV;
+	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV;
 	private TimePicker timePicker1;
 	private TimePicker timePicker2;
 	private Spinner frequencySpinner;
@@ -42,6 +42,7 @@ public class MainActivity extends Activity {
 	private Button btnSetStart;
 	private Button btnSetEnd;
 	private Button btnSetEnc;
+	private Button btnDelete;
 	private int hour1;
 	private int hour2;
 	private int minute1;
@@ -50,9 +51,9 @@ public class MainActivity extends Activity {
 	static final int TIME_DIALOG_ID2=998;
 	
 	SharedPreferences mPrefs;
-	
+	SharedPreferences setPrefs;
 	final String welcomeScreenShownPref = "welcomeScreenShown";
-
+	final String configScreenShownPref = "configScreenShown";
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,10 +62,10 @@ public class MainActivity extends Activity {
 	    settingsPage = (RelativeLayout) findViewById(R.id.settingsPage);
 	    configPage=(RelativeLayout) findViewById(R.id.configPage);
 	    mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-	    
+	    setPrefs=PreferenceManager.getDefaultSharedPreferences(this);
 	    // second argument is the default to use if the preference can't be found
 	    Boolean welcomeScreenShown = mPrefs.getBoolean(welcomeScreenShownPref, false);
-
+	    Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
 	    if (!welcomeScreenShown) {
 	        // here you can launch another activity if you like
 	        // the code below will display a popup
@@ -81,13 +82,31 @@ public class MainActivity extends Activity {
 	        editor.putBoolean(welcomeScreenShownPref, true);
 	        editor.commit(); // Very important to save the preference
 	    }
+	    
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
 	    currStartTV=(TextView) findViewById(R.id.currStart);
 	    currEndTV=(TextView) findViewById(R.id.currEnd);
 	    freqTV=(TextView) findViewById(R.id.currFreq);
+	    settingsTV=(TextView) findViewById(R.id.titleSettings);
+	    settingsTV.setText("EncourageMe Settings");
+	    configTV=(TextView) findViewById(R.id.titleConfig);
+	    configTV.setText("EncourageMe Configuration");
 	    addListenerOnSpinnerItemSelection();
+	    //If a configuration is already set
+	    if (configScreenShown)
+	    {
+	    	//Set hour1, hour2, minute1, minute2, and frequency from Scheduler data.
+	    	//These settings are for testing, but each should call a (getObject()) function from scheduler
+	    	hour1=1;
+	    	hour2=4;
+	    	minute1=30;
+	    	minute2=20;
+	    	frequencySet="Every hour";
+	    	configPageNow();
+			
+	    }
 	}
 	
 	public void addListenerOnSpinnerItemSelection() {
@@ -115,7 +134,10 @@ public class MainActivity extends Activity {
 			  public void onClick(View v) {
 		 
 			  frequencySet=String.valueOf(frequencySpinner.getSelectedItem());
-		      configP(v);         
+		      configP(v); 
+		      SharedPreferences.Editor editor = setPrefs.edit();
+		      editor.putBoolean(configScreenShownPref, true);
+		      editor.commit(); 
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
 			  }
 		 
@@ -137,6 +159,22 @@ public class MainActivity extends Activity {
 				showDialog(TIME_DIALOG_ID2);
 			}
 		});
+		
+		btnDelete=(Button) findViewById(R.id.btnDel);
+		btnDelete.setOnClickListener(new OnClickListener() {
+			 
+			  @Override
+			  public void onClick(View v) {
+				  
+			  //Delete currently scheduled Encouragements
+		      settingsPD(v); 
+		      SharedPreferences.Editor editor = setPrefs.edit();
+		      editor.putBoolean(configScreenShownPref, false);
+		      editor.commit(); 
+				
+			  }
+		 
+			});
 	}
 	
 	@Override
@@ -210,8 +248,44 @@ public class MainActivity extends Activity {
 		
 		freqTV.setText("The Frequency is set at " + frequencySet);
 	}
+	public void configPageNow()
+	{
+		settingsPage.setVisibility(View.GONE);
+		configPage.setVisibility(View.VISIBLE);
+		String m1,m2;
+		String min1, min2;
+		if(hour1>=12) m1="PM";
+		else m1="AM";
+		
+		if(hour2>=12) m2="PM";
+		else m2="AM";
+		
+		if(minute1<10) min1="0"+minute1;
+		else min1=""+minute1;
+		
+		if(minute2<10) min2="0"+minute2;
+		else min2=""+minute2;
+		
+		if(hour1!=0&&hour1!=12)
+			currStartTV.setText("Start time is "+ (hour1%12)+":"+(min1)+m1);
+		else if(hour1==0||hour1==12)
+			currStartTV.setText("Start time is "+ ("12")+":"+(min1)+m1);
+		
+		if(hour2!=0&&hour2!=12)
+			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
+		else if(hour1==0||hour1==12)
+			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
+		
+		freqTV.setText("The Frequency is set at " + frequencySet);
+	}
 	public void settingsP(View v)
 	{
+		configPage.setVisibility(View.GONE);
+		settingsPage.setVisibility(View.VISIBLE);
+	}
+	public void settingsPD(View v)
+	{
+		//Delete currently scheduled Encouragements
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 	}

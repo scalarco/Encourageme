@@ -28,22 +28,26 @@ or to a theme attribute in the form "<code>?[<i>package</i>:][<i>type</i>:]<i>na
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int btnEdit=0x7f090008;
-        public static final int btnSetEnd=0x7f090004;
-        public static final int btnSetStart=0x7f090002;
-        public static final int configPage=0x7f090007;
-        public static final int currEnd=0x7f09000a;
-        public static final int currFreq=0x7f09000b;
-        public static final int currStart=0x7f090009;
-        public static final int freqSpinner=0x7f090005;
-        public static final int menu_settings=0x7f09000c;
-        public static final int setEncourage=0x7f090006;
+        public static final int btnDel=0x7f09000b;
+        public static final int btnEdit=0x7f09000a;
+        public static final int btnSetEnd=0x7f090005;
+        public static final int btnSetStart=0x7f090003;
+        public static final int configPage=0x7f090008;
+        public static final int currEnd=0x7f09000d;
+        public static final int currFreq=0x7f09000e;
+        public static final int currStart=0x7f09000c;
+        public static final int freqSpinner=0x7f090006;
+        public static final int menu_settings=0x7f09000f;
+        public static final int setEncourage=0x7f090007;
         public static final int settingsPage=0x7f090000;
-        public static final int timePicker1=0x7f090001;
-        public static final int timePicker2=0x7f090003;
+        public static final int timePicker1=0x7f090002;
+        public static final int timePicker2=0x7f090004;
+        public static final int titleConfig=0x7f090009;
+        public static final int titleSettings=0x7f090001;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
+        public static final int settings=0x7f030001;
     }
     public static final class menu {
         public static final int activity_main=0x7f080000;
