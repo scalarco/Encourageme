@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
 	private int minute2;
 	static final int TIME_DIALOG_ID1=999;
 	static final int TIME_DIALOG_ID2=998;
+	private SmsAlarm manager;
 	
 	SharedPreferences mPrefs;
 	SharedPreferences setPrefs;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 	    configPage=(RelativeLayout) findViewById(R.id.configPage);
 	    mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    setPrefs=PreferenceManager.getDefaultSharedPreferences(this);
+	    manager = new SmsAlarm();
 	    // second argument is the default to use if the preference can't be found
 	    Boolean welcomeScreenShown = mPrefs.getBoolean(welcomeScreenShownPref, false);
 	    Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
@@ -99,10 +101,10 @@ public class MainActivity extends Activity {
 	    {
 	    	//Set hour1, hour2, minute1, minute2, and frequency from Scheduler data.
 	    	//These settings are for testing, but each should call a (getObject()) function from scheduler
-	    	hour1=1;
-	    	hour2=4;
-	    	minute1=30;
-	    	minute2=20;
+	    	hour1=manager.getHour1();
+	    	hour2=manager.getHour2();
+	    	minute1=manager.getMinute1();
+	    	minute2=manager.getMinute2();
 	    	frequencySet="Every hour";
 	    	configPageNow();
 			
@@ -139,6 +141,12 @@ public class MainActivity extends Activity {
 		      editor.putBoolean(configScreenShownPref, true);
 		      editor.commit(); 
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
+		      manager = new SmsAlarm();
+		      manager.setHour1(hour1);
+		      manager.setHour2(hour2);
+		      manager.setMinute1(minute1);
+		      manager.setMinute2(minute2);
+		      manager.SetAlarm(getApplicationContext());
 			  }
 		 
 			});
@@ -167,6 +175,7 @@ public class MainActivity extends Activity {
 			  public void onClick(View v) {
 				  
 			  //Delete currently scheduled Encouragements
+			  manager.CancelAlarm(getApplicationContext());
 		      settingsPD(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, false);
@@ -286,6 +295,7 @@ public class MainActivity extends Activity {
 	public void settingsPD(View v)
 	{
 		//Delete currently scheduled Encouragements
+		manager.CancelAlarm(getApplicationContext());
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 	}
