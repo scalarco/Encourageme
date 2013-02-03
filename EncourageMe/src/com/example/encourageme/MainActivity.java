@@ -105,7 +105,12 @@ public class MainActivity extends Activity {
 	    	hour2=manager.getHour2();
 	    	minute1=manager.getMinute1();
 	    	minute2=manager.getMinute2();
+<<<<<<< HEAD
 	    	frequencySet="Every hour";
+=======
+	    	int freqInt=manager.getFrequency();
+	    	frequencySet=freqInttoString(freqInt);
+>>>>>>> 0a5f507a83836ad900347a66ee22206925264fb9
 	    	configPageNow();
 			
 	    }
@@ -124,6 +129,42 @@ public class MainActivity extends Activity {
 		timePicker2=(TimePicker) findViewById(R.id.timePicker2);
 		
 	}
+	
+	public String freqInttoString(int freq){
+		if( freq==1440)
+			return "Once a day";
+		else if(freq==720)
+			return "Twice a day";
+		else if(freq==480)
+			return "Every 8 hours";
+		else if(freq==240)
+			return "Every 4 hours";
+		else if(freq==120)
+			return "Every 2 hours";
+		else if(freq==60)
+			return "Every hour";
+		else
+			return null;
+	}
+	
+	public int frequencyToInt(String freq){
+		
+		if( freq.equals("Once a day"))
+			return 1440;
+		else if( freq.equals("Twice a day"))
+			return 720;
+		else if(freq.equals("Every 8 hours"))
+			return 480;
+		else if(freq.equals("Every 4 hours"))
+			return 240;
+		else if(freq.equals("Every 2 hours"))
+			return 120;
+		else if(freq.equals("Every hour"))
+			return 60;
+		else
+			return 0;
+	
+	}
 	public void addListenerOnButton()
 	{
 		btnSetStart=(Button) findViewById(R.id.btnSetStart);
@@ -136,6 +177,7 @@ public class MainActivity extends Activity {
 			  public void onClick(View v) {
 		 
 			  frequencySet=String.valueOf(frequencySpinner.getSelectedItem());
+			  int freqInt=frequencyToInt(frequencySet);
 		      configP(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
@@ -146,6 +188,10 @@ public class MainActivity extends Activity {
 		      manager.setHour2(hour2);
 		      manager.setMinute1(minute1);
 		      manager.setMinute2(minute2);
+<<<<<<< HEAD
+=======
+		      manager.setFrequency(freqInt);
+>>>>>>> 0a5f507a83836ad900347a66ee22206925264fb9
 		      manager.SetAlarm(getApplicationContext());
 			  }
 		 

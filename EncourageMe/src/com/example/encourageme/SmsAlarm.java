@@ -21,7 +21,7 @@ public class SmsAlarm extends BroadcastReceiver {
 		Calendar c = Calendar.getInstance();
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
-		if (currentHour > hour1 && currentHour < hour2 && currentMinute > minute1 && currentMinute > minute2) {
+		if (currentHour > hour1 && currentHour < hour2 && currentMinute > minute1 && currentMinute < minute2) {
 			manager.sendTextMessage(phoneNumber, null, "Test message", null, null);
 		}
 	}
