@@ -49,6 +49,7 @@ public class MainActivity extends Activity {
 	private int minute2;
 	static final int TIME_DIALOG_ID1=999;
 	static final int TIME_DIALOG_ID2=998;
+	private SmsAlarm manager;
 	
 	SharedPreferences mPrefs;
 	SharedPreferences setPrefs;
@@ -63,6 +64,7 @@ public class MainActivity extends Activity {
 	    configPage=(RelativeLayout) findViewById(R.id.configPage);
 	    mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    setPrefs=PreferenceManager.getDefaultSharedPreferences(this);
+	    manager = new SmsAlarm();
 	    // second argument is the default to use if the preference can't be found
 	    Boolean welcomeScreenShown = mPrefs.getBoolean(welcomeScreenShownPref, false);
 	    Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
@@ -99,11 +101,12 @@ public class MainActivity extends Activity {
 	    {
 	    	//Set hour1, hour2, minute1, minute2, and frequency from Scheduler data.
 	    	//These settings are for testing, but each should call a (getObject()) function from scheduler
-	    	hour1=1;
-	    	hour2=4;
-	    	minute1=30;
-	    	minute2=20;
-	    	frequencySet="Every hour";
+	    	hour1=manager.getHour1();
+	    	hour2=manager.getHour2();
+	    	minute1=manager.getMinute1();
+	    	minute2=manager.getMinute2();
+	    	int freqInt=manager.getFrequency();
+	    	frequencySet=freqInttoString(freqInt);
 	    	configPageNow();
 			
 	    }
@@ -122,6 +125,42 @@ public class MainActivity extends Activity {
 		timePicker2=(TimePicker) findViewById(R.id.timePicker2);
 		
 	}
+	
+	public String freqInttoString(int freq){
+		if( freq==1440)
+			return "Once a day";
+		else if(freq==720)
+			return "Twice a day";
+		else if(freq==480)
+			return "Every 8 hours";
+		else if(freq==240)
+			return "Every 4 hours";
+		else if(freq==120)
+			return "Every 2 hours";
+		else if(freq==60)
+			return "Every hour";
+		else
+			return null;
+	}
+	
+	public int frequencyToInt(String freq){
+		
+		if( freq.equals("Once a day"))
+			return 1440;
+		else if( freq.equals("Twice a day"))
+			return 720;
+		else if(freq.equals("Every 8 hours"))
+			return 480;
+		else if(freq.equals("Every 4 hours"))
+			return 240;
+		else if(freq.equals("Every 2 hours"))
+			return 120;
+		else if(freq.equals("Every hour"))
+			return 60;
+		else
+			return 0;
+	
+	}
 	public void addListenerOnButton()
 	{
 		btnSetStart=(Button) findViewById(R.id.btnSetStart);
@@ -134,11 +173,19 @@ public class MainActivity extends Activity {
 			  public void onClick(View v) {
 		 
 			  frequencySet=String.valueOf(frequencySpinner.getSelectedItem());
+			  int freqInt=frequencyToInt(frequencySet);
 		      configP(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
 		      editor.commit(); 
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
+		      manager = new SmsAlarm();
+		      manager.setHour1(hour1);
+		      manager.setHour2(hour2);
+		      manager.setMinute1(minute1);
+		      manager.setMinute2(minute2);
+		      manager.setFrequency(freqInt);
+		      manager.SetAlarm(getApplicationContext());
 			  }
 		 
 			});
@@ -167,6 +214,7 @@ public class MainActivity extends Activity {
 			  public void onClick(View v) {
 				  
 			  //Delete currently scheduled Encouragements
+			  manager.CancelAlarm(getApplicationContext());
 		      settingsPD(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, false);
@@ -286,6 +334,7 @@ public class MainActivity extends Activity {
 	public void settingsPD(View v)
 	{
 		//Delete currently scheduled Encouragements
+		manager.CancelAlarm(getApplicationContext());
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 	}
