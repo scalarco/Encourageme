@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.view.Menu;
 import java.util.Calendar;
 import android.app.Activity;
@@ -50,11 +51,13 @@ public class MainActivity extends Activity {
 	static final int TIME_DIALOG_ID1=999;
 	static final int TIME_DIALOG_ID2=998;
 	private SmsAlarm manager;
+	private boolean settingsSet;
 	
 	SharedPreferences mPrefs;
 	SharedPreferences setPrefs;
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	final String configScreenShownPref = "configScreenShown";
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -84,7 +87,7 @@ public class MainActivity extends Activity {
 	        editor.putBoolean(welcomeScreenShownPref, true);
 	        editor.commit(); // Very important to save the preference
 	    }
-	    
+
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
@@ -99,37 +102,33 @@ public class MainActivity extends Activity {
 	    //If a configuration is already set
 	    if (configScreenShown)
 	    {
-	    	//Set hour1, hour2, minute1, minute2, and frequency from Scheduler data.
-	    	//These settings are for testing, but each should call a (getObject()) function from scheduler
-	    	hour1=manager.getHour1();
-	    	hour2=manager.getHour2();
-	    	minute1=manager.getMinute1();
-	    	minute2=manager.getMinute2();
-<<<<<<< HEAD
-	    	frequencySet="Every hour";
-=======
-	    	int freqInt=manager.getFrequency();
+	    	//get the values from the SharedPreferences
+	    	hour1 = setPrefs.getInt("hour1", 0);
+	    	hour2 = setPrefs.getInt("hour2", 0);
+	    	minute1 = setPrefs.getInt("minute1", 0);
+	    	minute2 = setPrefs.getInt("minute2", 0);
+	    	int freqInt = setPrefs.getInt("frequency", 0);
 	    	frequencySet=freqInttoString(freqInt);
->>>>>>> 0a5f507a83836ad900347a66ee22206925264fb9
+	    	setSmsAlarm(hour1, hour2, minute1, minute2, freqInt);
 	    	configPageNow();
-			
+
 	    }
 	}
-	
+
 	public void addListenerOnSpinnerItemSelection() {
 		frequencySpinner = (Spinner) findViewById(R.id.freqSpinner);
 		frequencySpinner.setOnItemSelectedListener(new CustomOnItemSelectedListener());
 	  }
-	
+
 	public void setStartTimeOnView(){
 		timePicker1=(TimePicker) findViewById(R.id.timePicker1);
-		
+
 	}
 	public void setEndTimeOnView(){
 		timePicker2=(TimePicker) findViewById(R.id.timePicker2);
-		
+
 	}
-	
+
 	public String freqInttoString(int freq){
 		if( freq==1440)
 			return "Once a day";
@@ -146,9 +145,9 @@ public class MainActivity extends Activity {
 		else
 			return null;
 	}
-	
+
 	public int frequencyToInt(String freq){
-		
+
 		if( freq.equals("Once a day"))
 			return 1440;
 		else if( freq.equals("Twice a day"))
@@ -163,40 +162,32 @@ public class MainActivity extends Activity {
 			return 60;
 		else
 			return 0;
-	
+
 	}
 	public void addListenerOnButton()
 	{
 		btnSetStart=(Button) findViewById(R.id.btnSetStart);
 		frequencySpinner = (Spinner) findViewById(R.id.freqSpinner);
-		
+
 		btnSetEnc=(Button) findViewById(R.id.setEncourage);
 		btnSetEnc.setOnClickListener(new OnClickListener() {
-			 
+
 			  @Override
 			  public void onClick(View v) {
-		 
+
 			  frequencySet=String.valueOf(frequencySpinner.getSelectedItem());
 			  int freqInt=frequencyToInt(frequencySet);
 		      configP(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
-		      editor.commit(); 
+		      
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
-		      manager = new SmsAlarm();
-		      manager.setHour1(hour1);
-		      manager.setHour2(hour2);
-		      manager.setMinute1(minute1);
-		      manager.setMinute2(minute2);
-<<<<<<< HEAD
-=======
-		      manager.setFrequency(freqInt);
->>>>>>> 0a5f507a83836ad900347a66ee22206925264fb9
-		      manager.SetAlarm(getApplicationContext());
+		      setSmsAlarm(hour1, hour2, minute1, minute2, freqInt);
+		      editor.commit();
 			  }
-		 
+
 			});
-		  
+
 		btnSetStart.setOnClickListener(new OnClickListener(){
 			@SuppressWarnings("deprecation")
 			@Override
@@ -204,7 +195,7 @@ public class MainActivity extends Activity {
 				showDialog(TIME_DIALOG_ID1);
 			}
 		});
-		
+
 		btnSetEnd=(Button) findViewById(R.id.btnSetEnd);
 		btnSetEnd.setOnClickListener(new OnClickListener(){
 			@SuppressWarnings("deprecation")
@@ -213,39 +204,39 @@ public class MainActivity extends Activity {
 				showDialog(TIME_DIALOG_ID2);
 			}
 		});
-		
+
 		btnDelete=(Button) findViewById(R.id.btnDel);
 		btnDelete.setOnClickListener(new OnClickListener() {
-			 
+
 			  @Override
 			  public void onClick(View v) {
-				  
+
 			  //Delete currently scheduled Encouragements
 			  manager.CancelAlarm(getApplicationContext());
 		      settingsPD(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, false);
 		      editor.commit(); 
-				
+
 			  }
-		 
+
 			});
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id){
 		switch(id){
 		case TIME_DIALOG_ID1:
 			return new TimePickerDialog(this,
 					timePickerListener1, hour1, minute1, false);
-			
+
 		case TIME_DIALOG_ID2:
 			return new TimePickerDialog(this,
 					timePickerListener2, hour2, minute2, false);
 		}
 		return null;
 	}
-	
+
 	private TimePickerDialog.OnTimeSetListener timePickerListener1 = 
             new TimePickerDialog.OnTimeSetListener() {
 		public void onTimeSet(TimePicker view, int selectedHour,
@@ -256,7 +247,7 @@ public class MainActivity extends Activity {
 			// set current time into timepicker
 			timePicker1.setCurrentHour(hour1);
 			timePicker1.setCurrentMinute(minute1);
-			
+
 		}
 	};
 	private TimePickerDialog.OnTimeSetListener timePickerListener2 = 
@@ -272,7 +263,7 @@ public class MainActivity extends Activity {
  
 		}
 	};
-	
+
 	public void configP(View v)
 	{
 		settingsPage.setVisibility(View.GONE);
@@ -281,26 +272,26 @@ public class MainActivity extends Activity {
 		String min1, min2;
 		if(hour1>=12) m1="PM";
 		else m1="AM";
-		
+
 		if(hour2>=12) m2="PM";
 		else m2="AM";
-		
+
 		if(minute1<10) min1="0"+minute1;
 		else min1=""+minute1;
-		
+
 		if(minute2<10) min2="0"+minute2;
 		else min2=""+minute2;
-		
+
 		if(hour1!=0&&hour1!=12)
 			currStartTV.setText("Start time is "+ (hour1%12)+":"+(min1)+m1);
 		else if(hour1==0||hour1==12)
 			currStartTV.setText("Start time is "+ ("12")+":"+(min1)+m1);
-		
+
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
 		else if(hour1==0||hour1==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
-		
+
 		freqTV.setText("The Frequency is set at " + frequencySet);
 	}
 	public void configPageNow()
@@ -311,26 +302,26 @@ public class MainActivity extends Activity {
 		String min1, min2;
 		if(hour1>=12) m1="PM";
 		else m1="AM";
-		
+
 		if(hour2>=12) m2="PM";
 		else m2="AM";
-		
+
 		if(minute1<10) min1="0"+minute1;
 		else min1=""+minute1;
-		
+
 		if(minute2<10) min2="0"+minute2;
 		else min2=""+minute2;
-		
+
 		if(hour1!=0&&hour1!=12)
 			currStartTV.setText("Start time is "+ (hour1%12)+":"+(min1)+m1);
 		else if(hour1==0||hour1==12)
 			currStartTV.setText("Start time is "+ ("12")+":"+(min1)+m1);
-		
+
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
 		else if(hour1==0||hour1==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
-		
+
 		freqTV.setText("The Frequency is set at " + frequencySet);
 	}
 	public void settingsP(View v)
@@ -345,7 +336,22 @@ public class MainActivity extends Activity {
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 	}
-	
-	
-	
+
+	public void setSmsAlarm(int h1, int h2, int m1, int m2, int freq) {
+		manager.setHour1(h1);
+		manager.setHour2(h2);
+		manager.setMinute1(m1);
+		manager.setHour2(m2);
+		manager.setFrequency(freq);
+		manager.SetAlarm(getApplicationContext());
+		SharedPreferences.Editor editor = setPrefs.edit();
+		editor.putInt("hour1", hour1);
+	    editor.putInt("hour2", hour2);
+	    editor.putInt("minute1", minute1);
+	    editor.putInt("minute2", minute2);
+	    editor.putInt("frequency", freq);
+	    editor.putBoolean("settingsSet", true);
+	    editor.commit();
+	}
+
 }
