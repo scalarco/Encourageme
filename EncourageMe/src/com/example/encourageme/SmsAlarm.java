@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
@@ -27,6 +28,7 @@ public class SmsAlarm extends BroadcastReceiver {
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
 		if (currentHour > hour1 && currentHour < hour2 && currentMinute > minute1 && currentMinute < minute2) {
+			int messages = R.array.messages; //value isn't an array or ArrayList like I thought it would be
 			manager.sendTextMessage(phoneNumber, null, "Test message", null, null);
 		}
 	}
