@@ -67,14 +67,15 @@ public class MainActivity extends Activity {
 	    configPage=(RelativeLayout) findViewById(R.id.configPage);
 	    mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    setPrefs=PreferenceManager.getDefaultSharedPreferences(this);
-	    manager = new SmsAlarm();
+	    
 	    // second argument is the default to use if the preference can't be found
 	    Boolean welcomeScreenShown = mPrefs.getBoolean(welcomeScreenShownPref, false);
 	    Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
 	    if (!welcomeScreenShown) {
 	        // here you can launch another activity if you like
 	        // the code below will display a popup
-
+	    	manager = new SmsAlarm();
+	    	manager.saveAlarm(getApplicationContext());
 	        String whatsNewTitle = getResources().getString(R.string.whatsNewTitle);
 	        String whatsNewText = getResources().getString(R.string.whatsNewText);
 	        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(whatsNewTitle).setMessage(whatsNewText).setPositiveButton(
@@ -87,7 +88,8 @@ public class MainActivity extends Activity {
 	        editor.putBoolean(welcomeScreenShownPref, true);
 	        editor.commit(); // Very important to save the preference
 	    }
-
+	    manager=new SmsAlarm();
+	    manager.loadAlarm(getApplicationContext());
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
