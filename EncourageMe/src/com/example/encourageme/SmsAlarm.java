@@ -1,5 +1,10 @@
 package com.example.encourageme;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Calendar;
 
 import android.app.AlarmManager;
@@ -12,7 +17,7 @@ import android.telephony.TelephonyManager;
 
 public class SmsAlarm extends BroadcastReceiver {
 	private int hour1, minute1, hour2, minute2, frequency;
-	
+	String FILENAME="saver";
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		SmsManager manager = SmsManager.getDefault();
@@ -38,6 +43,38 @@ public class SmsAlarm extends BroadcastReceiver {
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
+	}
+	
+	public void saveAlarm(Context context){
+		try{
+		FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+		ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.writeObject(this);
+		os.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public SmsAlarm loadAlarm(Context context){
+		SmsAlarm manager=new SmsAlarm();
+		try{
+		FileInputStream fis = context.openFileInput(FILENAME);
+		ObjectInputStream is=new ObjectInputStream(fis);
+		try {
+			manager=(SmsAlarm) is.readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		is.close();
+		
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		return manager;
 	}
 	
 	public int getHour1() {
