@@ -17,7 +17,7 @@ import android.telephony.TelephonyManager;
 
 public class SmsAlarm extends BroadcastReceiver {
 	private int hour1, minute1, hour2, minute2, frequency;
-	String FILENAME="saver";
+	
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		SmsManager manager = SmsManager.getDefault();
@@ -26,7 +26,7 @@ public class SmsAlarm extends BroadcastReceiver {
 		Calendar c = Calendar.getInstance();
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
-		if (currentHour > hour1 && currentHour < hour2 && currentMinute > minute1 && currentMinute < minute2) {
+		if (currentHour >= hour1 && currentHour <= hour2 && currentMinute >= minute1 && currentMinute <= minute2) {
 			String[] messages = context.getResources().getStringArray(R.array.messages);
 			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
 		}
@@ -46,37 +46,7 @@ public class SmsAlarm extends BroadcastReceiver {
         alarmManager.cancel(sender);
 	}
 	
-	public void saveAlarm(Context context){
-		try{
-		FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
-		ObjectOutputStream os = new ObjectOutputStream(fos);
-		os.writeObject(this);
-		os.close();
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-	}
 	
-	public SmsAlarm loadAlarm(Context context){
-		SmsAlarm manager=new SmsAlarm();
-		try{
-		FileInputStream fis = context.openFileInput(FILENAME);
-		ObjectInputStream is=new ObjectInputStream(fis);
-		try {
-			manager=(SmsAlarm) is.readObject();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		is.close();
-		
-		}
-		catch(IOException e){
-			e.printStackTrace();
-		}
-		return manager;
-	}
 	
 	public int getHour1() {
 		return hour1;

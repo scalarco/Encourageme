@@ -10,6 +10,12 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.telephony.TelephonyManager;
 import android.view.Menu;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Calendar;
 import android.app.Activity;
 import android.app.Dialog;
@@ -34,7 +40,7 @@ import java.util.List;
 import java.util.Set;
 
 public class MainActivity extends Activity {
-
+	String FILENAME="saver";
 	private RelativeLayout settingsPage;
 	private RelativeLayout configPage;
 	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV, phoneTV;
@@ -77,7 +83,7 @@ public class MainActivity extends Activity {
 	        // here you can launch another activity if you like
 	        // the code below will display a popup
 	    	manager = new SmsAlarm();
-	    	manager.saveAlarm(getApplicationContext());
+	    	saveAlarm(getApplicationContext());
 	        String whatsNewTitle = getResources().getString(R.string.whatsNewTitle);
 	        String whatsNewText = getResources().getString(R.string.whatsNewText);
 	        new AlertDialog.Builder(this).setIcon(android.R.drawable.ic_dialog_alert).setTitle(whatsNewTitle).setMessage(whatsNewText).setPositiveButton(
@@ -91,7 +97,7 @@ public class MainActivity extends Activity {
 	        editor.commit(); // Very important to save the preference
 	    }
 	    manager=new SmsAlarm();
-	    manager.loadAlarm(getApplicationContext());
+	    loadAlarm(getApplicationContext());
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
@@ -360,13 +366,44 @@ public class MainActivity extends Activity {
 		manager.setFrequency(freq);
 		manager.SetAlarm(getApplicationContext());
 		SharedPreferences.Editor editor = setPrefs.edit();
-		editor.putInt("hour1", hour1);
-	    editor.putInt("hour2", hour2);
-	    editor.putInt("minute1", minute1);
-	    editor.putInt("minute2", minute2);
+		editor.putInt("hour1", h1);
+	    editor.putInt("hour2", h2);
+	    editor.putInt("minute1", m1);
+	    editor.putInt("minute2", m2);
 	    editor.putInt("frequency", freq);
 	    editor.putBoolean("settingsSet", true);
 	    editor.commit();
+	}
+	public void saveAlarm(Context context){
+		try{
+		FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
+		ObjectOutputStream os = new ObjectOutputStream(fos);
+		os.writeObject(manager);
+		os.close();
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+	}
+	
+	public SmsAlarm loadAlarm(Context context){
+		
+		try{
+		FileInputStream fis = context.openFileInput(FILENAME);
+		ObjectInputStream is=new ObjectInputStream(fis);
+		try {
+			manager=(SmsAlarm) is.readObject();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		is.close();
+		
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		}
+		return manager;
 	}
 
 }
