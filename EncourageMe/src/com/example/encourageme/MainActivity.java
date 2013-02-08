@@ -4,9 +4,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.telephony.TelephonyManager;
 import android.view.Menu;
 import java.util.Calendar;
 import android.app.Activity;
@@ -35,7 +37,7 @@ public class MainActivity extends Activity {
 
 	private RelativeLayout settingsPage;
 	private RelativeLayout configPage;
-	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV;
+	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV, phoneTV;
 	private TimePicker timePicker1;
 	private TimePicker timePicker2;
 	private Spinner frequencySpinner;
@@ -93,6 +95,7 @@ public class MainActivity extends Activity {
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
+	    phoneTV=(TextView) findViewById(R.id.phoneN);
 	    currStartTV=(TextView) findViewById(R.id.currStart);
 	    currEndTV=(TextView) findViewById(R.id.currEnd);
 	    freqTV=(TextView) findViewById(R.id.currFreq);
@@ -144,6 +147,8 @@ public class MainActivity extends Activity {
 			return "Every 2 hours";
 		else if(freq==60)
 			return "Every hour";
+		else if(freq==1)
+			return "Every minute";
 		else
 			return null;
 	}
@@ -162,6 +167,8 @@ public class MainActivity extends Activity {
 			return 120;
 		else if(freq.equals("Every hour"))
 			return 60;
+		else if(freq.equals("Every minute"))
+			return 1;
 		else
 			return 0;
 
@@ -270,6 +277,9 @@ public class MainActivity extends Activity {
 	{
 		settingsPage.setVisibility(View.GONE);
 		configPage.setVisibility(View.VISIBLE);
+		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+		String phoneNumber = tMgr1.getLine1Number();
+		phoneTV.setText(phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";
@@ -300,6 +310,9 @@ public class MainActivity extends Activity {
 	{
 		settingsPage.setVisibility(View.GONE);
 		configPage.setVisibility(View.VISIBLE);
+		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
+		String phoneNumber = tMgr1.getLine1Number();
+		phoneTV.setText(phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";

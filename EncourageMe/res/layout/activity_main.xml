@@ -125,6 +125,15 @@
 					android:layout_alignParentLeft="true"
 					android:padding="10px"
 					android:textSize="30px"/>
+					<TextView 
+			    	android:id="@+id/phoneN"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_below="@+id/currFreq"
+					android:textColor="#FF3300"
+					android:layout_alignParentLeft="true"
+					android:padding="10px"
+					android:textSize="30px"/>
 					
 	</RelativeLayout>
 </LinearLayout>
