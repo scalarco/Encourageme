@@ -35,12 +35,14 @@ public class SmsAlarm extends BroadcastReceiver {
 	public void SetAlarm(Context context) {
 		AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, SmsAlarm.class);
+        i.setAction("com.android.encourageme.SMS_ALARM");
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * frequency, pi); //millisecond * second * minutes
 	}
 	
 	public void CancelAlarm(Context context) {
 		Intent intent = new Intent(context, SmsAlarm.class);
+		intent.setAction("com.android.encourageme.SMS_ALARM");
         PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);

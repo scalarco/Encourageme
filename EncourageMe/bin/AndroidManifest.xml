@@ -28,7 +28,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-       
+       <receiver android:name=".SmsAlarm">
+           <intent-filter>
+               <action android:name="com.android.encourageme.SMS_ALARM" />
+           </intent-filter>
+       </receiver>
     </application>
 
 </manifest>
