@@ -4,6 +4,8 @@
     package="com.example.encourageme"
     android:versionCode="1"
     android:versionName="1.0" >
+    <uses-permission android:name="android.permission.WRITE_SMS"></uses-permission>
+    <uses-permission android:name="android.permission.SET_SMS"></uses-permission>
 	<uses-permission android:name="android.permission.SEND_SMS"></uses-permission>
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"></uses-permission>
     <uses-permission android:name="android.permission.GET_TASKS"></uses-permission>
