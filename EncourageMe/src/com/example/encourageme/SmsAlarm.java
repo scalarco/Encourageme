@@ -12,28 +12,63 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 public class SmsAlarm extends BroadcastReceiver {
 	private int hour1, minute1, hour2, minute2, frequency;
-	
+	String FILENAME="saver";
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		setHour1(prefs.getInt("hour1", 0));
+		setHour2(prefs.getInt("hour2", 0));
+		setMinute1(prefs.getInt("minute1", 0));
+		setMinute2(prefs.getInt("minute2", 0));
+		setFrequency(prefs.getInt("frequency", 0));
 		SmsManager manager = SmsManager.getDefault();
 		TelephonyManager tMgr =(TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = tMgr.getLine1Number();
 		Calendar c = Calendar.getInstance();
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
-		if(currentHour>0){
-		//if (currentHour >= hour1 && currentHour <= hour2 && currentMinute >= minute1 && currentMinute <= minute2) {
+		int timeOption=timeOption(hour1, hour2, minute1, minute2);
+		if(timeOption==1){
+			if (currentHour >= hour1 && currentHour <= hour2 && currentMinute >= minute1 && currentMinute <= minute2) {
+			String[] messages = context.getResources().getStringArray(R.array.messages);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			}
+		}
+		else if(timeOption==2){
+			if ((currentHour >= hour1 && currentMinute >= minute1) || (currentHour <= hour2 && currentMinute <= minute1)) {
+			String[] messages = context.getResources().getStringArray(R.array.messages);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			}
+		}
+		else{
 			String[] messages = context.getResources().getStringArray(R.array.messages);
 			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
 		}
 	}
-	
+	private int timeOption(int h1, int h2, int m1, int m2)
+	{
+		if(h1<h2)
+			return 1;
+		else if(h1==h2)
+		{
+			if(m1<m2)
+				return 1;
+			else if(m1>m2)
+				return 2;
+			else
+				return 3;
+		}
+		else
+			return 2;
+	}
 	public void SetAlarm(Context context) {
 		AlarmManager am=(AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
         Intent i = new Intent(context, SmsAlarm.class);

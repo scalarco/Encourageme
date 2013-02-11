@@ -99,7 +99,7 @@ public class MainActivity extends Activity {
 	        editor.commit(); // Very important to save the preference
 	    }
 	    manager=new SmsAlarm();
-	    loadAlarm(getApplicationContext());
+	    manager=loadAlarm(getApplicationContext());
 	    setStartTimeOnView();
 	    setEndTimeOnView();
 	    addListenerOnButton();
@@ -385,6 +385,7 @@ public class MainActivity extends Activity {
 	    editor.putInt("frequency", freq);
 	    editor.putBoolean("settingsSet", true);
 	    editor.commit();
+	    saveAlarm(getApplicationContext());
 	}
 	public void saveAlarm(Context context){
 		try{
