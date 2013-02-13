@@ -10,7 +10,7 @@
 	<RelativeLayout android:id="@+id/settingsPage"
 	    android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
-		android:background="#000000"
+		
 		android:visibility="visible">
 			<TextView android:id="@+id/titleSettings"
 			    android:layout_width="wrap_content"
@@ -18,39 +18,54 @@
 			    android:layout_centerHorizontal="true"
 			    android:layout_alignParentTop="true"
 			    android:textColor="#FF3300"
-				android:padding="10px"
-				android:textSize="35px"/>
+				android:padding="10dp"
+				android:textSize="25dp"/>
 		    <TimePicker
 		        android:id="@+id/timePicker1"
+		        android:background="#cdc9c9"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
 		        android:layout_below="@+id/titleSettings" />
 
 		    <Button
 		        android:id="@+id/btnSetStart"
-		        android:layout_width="wrap_content"
+		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
+		       android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
 		        android:layout_below="@+id/timePicker1"	        
 		        android:text="Set Start Time" />
 
 		    <TimePicker
 		        android:id="@+id/timePicker2"
+		        android:background="#cdc9c9"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
+		        android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
 		        android:layout_below="@+id/btnSetStart" />
 
 		    <Button
 		        android:id="@+id/btnSetEnd"
-		        android:layout_width="wrap_content"
+		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
+		    android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
 		        android:layout_below="@+id/timePicker2"        
 		        android:text="Set End Time" />
 		    
 		    <Spinner
        		android:id="@+id/freqSpinner"
+       		 android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
+       		android:padding="10dp"
        		android:layout_width="match_parent"
         	android:layout_height="wrap_content"
+        	android:background="#cdc9c9"
         	android:layout_below="@+id/btnSetEnd"
+        	android:minHeight="30dp"
         	android:entries="@array/freq_array"
         	android:prompt="@string/frequency_prompt" />
 		    
@@ -58,9 +73,11 @@
 		    
 		    <Button
 		        android:id="@+id/setEncourage"
-		        android:layout_width="wrap_content"
+		        android:layout_width="match_parent"
 		        android:layout_height="wrap_content"
 		        android:layout_below="@+id/freqSpinner"
+		      android:layout_centerHorizontal="true"
+       		 android:paddingTop="10dp"
 		        android:onClick="configP"
 		        android:text="Set EncourageMe" />
 
@@ -71,7 +88,7 @@
 	    android:id="@+id/configPage"
 	    android:layout_width="wrap_content"
 	    android:layout_height="fill_parent"
-	    android:background="#000000"
+	    
 	    android:visibility="gone" >
 		<TextView android:id="@+id/titleConfig"
 			    android:layout_width="wrap_content"
@@ -79,12 +96,13 @@
 			    android:layout_centerHorizontal="true"
 			    android:layout_alignParentTop="true"
 			    android:textColor="#FF3300"
-				android:padding="10px"
-				android:textSize="35px"/>
+				android:padding="10dp"
+				android:textSize="23dp"/>
 		    	<Button
 		        	android:id="@+id/btnEdit"
 		        	android:layout_width="wrap_content"
 		        	android:layout_height="wrap_content"
+		        	
 		        	android:layout_alignParentLeft="true"
 		        	android:layout_below="@+id/titleConfig"
 		        	android:onClick="settingsP"
@@ -105,17 +123,17 @@
 					android:layout_height="wrap_content"
 					android:layout_below="@+id/btnEdit"
 					android:textColor="#FF3300"
-					android:padding="10px"
-					android:textSize="30px"/>
+					android:padding="10dp"
+					android:textSize="20dp"/>
 					<TextView 
 			   	 	android:id="@+id/currEnd"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_below="@+id/currStart"
 					android:textColor="#FF3300"
-					android:padding="10px"
+					android:padding="10dp"
 					android:layout_alignParentLeft="true"
-					android:textSize="30px"/>
+					android:textSize="20dp"/>
 					<TextView 
 			    	android:id="@+id/currFreq"
 					android:layout_width="wrap_content"
@@ -123,8 +141,8 @@
 					android:layout_below="@+id/currEnd"
 					android:textColor="#FF3300"
 					android:layout_alignParentLeft="true"
-					android:padding="10px"
-					android:textSize="30px"/>
+					android:padding="10dp"
+					android:textSize="20dp"/>
 					<TextView 
 			    	android:id="@+id/phoneN"
 					android:layout_width="wrap_content"
@@ -132,8 +150,8 @@
 					android:layout_below="@+id/currFreq"
 					android:textColor="#FF3300"
 					android:layout_alignParentLeft="true"
-					android:padding="10px"
-					android:textSize="30px"/>
+					android:padding="10dp"
+					android:textSize="20dp"/>
 					
 	</RelativeLayout>
 </LinearLayout>

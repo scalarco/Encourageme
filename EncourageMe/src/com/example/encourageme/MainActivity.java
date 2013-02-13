@@ -122,7 +122,7 @@ public class MainActivity extends Activity {
 	    	minute2 = setPrefs.getInt("minute2", 0);
 	    	int freqInt = setPrefs.getInt("frequency", 0);
 	    	frequencySet=freqInttoString(freqInt);
-	    	setSmsAlarm(hour1, hour2, minute1, minute2, freqInt);
+	    	
 	    	configPageNow();
 
 	    }
@@ -194,7 +194,10 @@ public class MainActivity extends Activity {
 
 			  frequencySet=String.valueOf(frequencySpinner.getSelectedItem());
 			  int freqInt=frequencyToInt(frequencySet);
-		      configP(v); 
+			  Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
+			  if(configScreenShown)
+				  manager.CancelAlarm(getApplicationContext());
+		      configP(v);
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
 		      
@@ -365,7 +368,7 @@ public class MainActivity extends Activity {
 	public void settingsPD(View v)
 	{
 		//Delete currently scheduled Encouragements
-		manager.CancelAlarm(getApplicationContext());
+		//manager.CancelAlarm(getApplicationContext());
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 	}

@@ -37,20 +37,38 @@ public class SmsAlarm extends BroadcastReceiver {
 		int currentMinute = c.get(Calendar.MINUTE);
 		int timeOption=timeOption(hour1, hour2, minute1, minute2);
 		if(timeOption==1){
-			if (currentHour >= hour1 && currentHour <= hour2 && currentMinute >= minute1 && currentMinute <= minute2) {
+			if (currentHour > hour1 && currentHour < hour2) {
 			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
 			}
+			else if (currentHour == hour1 && currentMinute > minute1) {
+				String[] messages = context.getResources().getStringArray(R.array.messages);
+				manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
+				}
+			else if (currentHour == hour2 && currentMinute < minute2) {
+				String[] messages = context.getResources().getStringArray(R.array.messages);
+				manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
+				}
+			else{}
 		}
 		else if(timeOption==2){
-			if ((currentHour >= hour1 && currentMinute >= minute1) || (currentHour <= hour2 && currentMinute <= minute1)) {
+			if ((currentHour > hour1 ) || (currentHour < hour2)) {
 			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
 			}
+			else if((currentHour==hour1)&&currentMinute>minute1){
+				String[] messages = context.getResources().getStringArray(R.array.messages);
+				manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
+			}
+			else if((currentHour==hour2)&&currentMinute<minute2){
+				String[] messages = context.getResources().getStringArray(R.array.messages);
+				manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
+			}
+			else{}
 		}
 		else{
 			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, "3"+messages[(int)(Math.random() * messages.length)], null, null);
 		}
 	}
 	private int timeOption(int h1, int h2, int m1, int m2)
