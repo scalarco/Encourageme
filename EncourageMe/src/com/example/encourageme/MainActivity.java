@@ -146,7 +146,7 @@ public class MainActivity extends Activity {
 		if( freq==1440)
 			return "Once a day";
 		else if(freq==720)
-			return "Twice a day";
+			return "Every 12 hours";
 		else if(freq==480)
 			return "Every 8 hours";
 		else if(freq==240)
@@ -165,7 +165,7 @@ public class MainActivity extends Activity {
 
 		if( freq.equals("Once a day"))
 			return 1440;
-		else if( freq.equals("Twice a day"))
+		else if( freq.equals("Every 12 hours"))
 			return 720;
 		else if(freq.equals("Every 8 hours"))
 			return 480;
@@ -300,7 +300,7 @@ public class MainActivity extends Activity {
 		configPage.setVisibility(View.VISIBLE);
 		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = tMgr1.getLine1Number();
-		phoneTV.setText(phoneNumber);
+		phoneTV.setText("You're phone number is: "+ phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";
@@ -322,7 +322,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour1==0||hour1==12)
+		else if(hour2==0||hour2==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);
@@ -333,7 +333,7 @@ public class MainActivity extends Activity {
 		configPage.setVisibility(View.VISIBLE);
 		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = tMgr1.getLine1Number();
-		phoneTV.setText(phoneNumber);
+		phoneTV.setText("You're phone number is: "+ phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";
@@ -355,7 +355,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour1==0||hour1==12)
+		else if(hour2==0||hour2==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);

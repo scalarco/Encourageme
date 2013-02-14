@@ -39,15 +39,15 @@ public class SmsAlarm extends BroadcastReceiver {
 		if(timeOption==1){
 			if (currentHour > hour1 && currentHour < hour2) {
 			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
 			}
 			else if (currentHour == hour1 && currentMinute > minute1) {
 				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
 				}
 			else if (currentHour == hour2 && currentMinute < minute2) {
 				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, "1"+messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
 				}
 			else{}
 		}
