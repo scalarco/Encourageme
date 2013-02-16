@@ -18,7 +18,7 @@ import android.telephony.SmsManager;
 import android.telephony.TelephonyManager;
 
 public class SmsAlarm extends BroadcastReceiver {
-	private int hour1, minute1, hour2, minute2, frequency;
+	private int hour1, minute1, hour2, minute2, frequency, index;
 	String FILENAME="saver";
 
 	@Override
@@ -36,40 +36,44 @@ public class SmsAlarm extends BroadcastReceiver {
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
 		int timeOption=timeOption(hour1, hour2, minute1, minute2);
+		setIndex(prefs.getInt("ind", 0));
+		
+		String[] messages = context.getResources().getStringArray(R.array.messages);
 		if(timeOption==1){
 			if (currentHour > hour1 && currentHour < hour2) {
-			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 			}
 			else if (currentHour == hour1 && currentMinute > minute1) {
-				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 				}
 			else if (currentHour == hour2 && currentMinute < minute2) {
-				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 				}
 			else{}
 		}
 		else if(timeOption==2){
 			if ((currentHour > hour1 ) || (currentHour < hour2)) {
-			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 			}
 			else if((currentHour==hour1)&&currentMinute>minute1){
-				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 			}
 			else if((currentHour==hour2)&&currentMinute<minute2){
-				String[] messages = context.getResources().getStringArray(R.array.messages);
-				manager.sendTextMessage(phoneNumber, null, "2"+messages[(int)(Math.random() * messages.length)], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() *(messages.length-1))], null, null);
 			}
 			else{}
 		}
 		else{
-			String[] messages = context.getResources().getStringArray(R.array.messages);
-			manager.sendTextMessage(phoneNumber, null, "3"+messages[(int)(Math.random() * messages.length)], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
 		}
+		
+		index++;
+		if (index >= messages.length) {
+			index = 0;
+		}
+		SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt("ind", index);
+		editor.commit();
 	}
 	private int timeOption(int h1, int h2, int m1, int m2)
 	{
@@ -94,7 +98,7 @@ public class SmsAlarm extends BroadcastReceiver {
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * frequency, pi); //millisecond * second * minutes
 	}
-	
+
 	public void CancelAlarm(Context context) {
 		Intent intent = new Intent(context, SmsAlarm.class);
 		intent.setAction("com.android.encourageme.SMS_ALARM");
@@ -102,45 +106,49 @@ public class SmsAlarm extends BroadcastReceiver {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         alarmManager.cancel(sender);
 	}
-	
-	
-	
+
+
+
 	public int getHour1() {
 		return hour1;
 	}
-	
+
 	public void setHour1(int num) {
 		hour1 = num;
 	}
 	
+	public void setIndex(int num) {
+		index = num;
+	}
+
 	public int getMinute1() {
 		return minute1;
 	}
-	
+
 	public void setMinute1(int num) {
 		minute1 = num;
 	}
-	
+
 	public int getHour2() {
 		return hour2;
 	}
-	
+
 	public void setHour2(int num) {
 		hour2 = num;
 	}
-	
+
 	public int getMinute2() {
 		return minute2;
 	}
-	
+
 	public void setMinute2(int num) {
 		minute2 = num;
 	}
-	
+
 	public int getFrequency() {
 		return frequency;
 	}
-	
+
 	public void setFrequency(int num) {
 		frequency = num;
 	}

@@ -8,7 +8,7 @@
     <string name="title_activity_splash">Splash</string>
     <string name="ok">OK</string>
     <string name="whatsNewTitle">Welcome</string>
-    <string name="whatsNewText">Welcome to EncourageMe!\n To use simply choose your preferences and click ok</string>
+    <string name="whatsNewText">Welcome to EncourageMe!\n Set the start and end time to control the time of day you will receive messages. Set the frequency at which you would like to receive messages between these hours. Press Set Encoureme and you will begin receiving encouragements. You can edit or delete these settings at any time.</string>
 	
     <string name="frequency_prompt">Select frequency of encouragements</string>
  
@@ -19,6 +19,7 @@
         <item>Every 4 hours</item>
         <item>Every 2 hours</item>
         <item>Every hour</item>
+        <item>Every 30 minutes</item>
         <item>Every minute</item>
     </string-array>
     
@@ -30,6 +31,7 @@
         <item>Follow your passions and you will never have regrets.</item>
         <item>Above all else be a person that you regret.</item>
         <item>Look and listen, you will learn.</item>
+        <item>Go confidently in the directions of your dreams! -Henry David Thoreau</item>
         <item>If you’re going through hell, keep going. -Winston Churchill</item>
         <item>However good you are, you can be better.</item>
         <item>Never be afraid to fail, eventually you will succeed.</item>
@@ -42,12 +44,11 @@
         <item>You have the potential to tap into the well of human strength within you.</item>
         <item>The world is full of infinite possibilities.</item>
         <item>I know of no more encouraging fact than the unquestionable ability of man to elevate his life by conscious endeavor. -Henry David Thoreau</item>
-        <item>Go confidently in the directions of your dreams!</item>
-        <item>Live the life you have imagined.</item>
         <item>Pleasure in the job puts perfection in the work. -Aristotle</item>
         <item>You\'re a winner.</item>
         <item>A creative man is motivated by the desire to achieve, not by the desire to beat others. -Ayn Rand</item>
         <item>Impress yourself.</item>
+        <item>Live the life you have imagined. -Henry David Thoreau</item>
         <item>Instead of giving myself reasons why I can’t, I give myself reasons why I can.</item>
         <item>Smile. Let everyone know that today, you\'re a lot stronger than you were yesterday.</item>
         <item>No matter how good or bad you think your life is, wake up each day and be thankful. Someone somewhere else is fighting to survive.</item>

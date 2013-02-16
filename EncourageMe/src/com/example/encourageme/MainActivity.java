@@ -7,45 +7,38 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.telephony.SmsManager;
+
 import android.telephony.TelephonyManager;
-import android.view.Menu;
+
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.Calendar;
-import android.app.Activity;
+
 import android.app.Dialog;
 import android.app.TimePickerDialog;
-import android.os.Bundle;
+
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ArrayAdapter;
+
 import android.widget.Button;
-import android.widget.ListView;
+
 import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.RelativeLayout;
-import android.widget.LinearLayout;
-import android.widget.Spinner;
-import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import android.widget.Spinner;
+
+
+
 
 public class MainActivity extends Activity {
 	String FILENAME="saver";
 	private RelativeLayout settingsPage;
 	private RelativeLayout configPage;
-	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV, phoneTV;
+	private TextView currStartTV, currEndTV, freqTV, configTV, settingsTV, phoneTV, startTimeTV, endTimeTV;
 	private TimePicker timePicker1;
 	private TimePicker timePicker2;
 	private Spinner frequencySpinner;
@@ -58,16 +51,17 @@ public class MainActivity extends Activity {
 	private int hour2;
 	private int minute1;
 	private int minute2;
+	private String[] m;
 	static final int TIME_DIALOG_ID1=999;
 	static final int TIME_DIALOG_ID2=998;
 	private SmsAlarm manager;
 	private boolean settingsSet;
-	
+
 	SharedPreferences mPrefs;
 	SharedPreferences setPrefs;
 	final String welcomeScreenShownPref = "welcomeScreenShown";
 	final String configScreenShownPref = "configScreenShown";
-	
+
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -77,7 +71,7 @@ public class MainActivity extends Activity {
 	    configPage=(RelativeLayout) findViewById(R.id.configPage);
 	    mPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    setPrefs=PreferenceManager.getDefaultSharedPreferences(this);
-	    
+	    m = getResources().getStringArray(R.array.messages);
 	    // second argument is the default to use if the preference can't be found
 	    Boolean welcomeScreenShown = mPrefs.getBoolean(welcomeScreenShownPref, false);
 	    Boolean configScreenShown=setPrefs.getBoolean(configScreenShownPref, false);
@@ -122,7 +116,7 @@ public class MainActivity extends Activity {
 	    	minute2 = setPrefs.getInt("minute2", 0);
 	    	int freqInt = setPrefs.getInt("frequency", 0);
 	    	frequencySet=freqInttoString(freqInt);
-	    	
+
 	    	configPageNow();
 
 	    }
@@ -134,11 +128,13 @@ public class MainActivity extends Activity {
 	  }
 
 	public void setStartTimeOnView(){
-		timePicker1=(TimePicker) findViewById(R.id.timePicker1);
+		//timePicker1=(TimePicker) findViewById(R.id.timePicker1);
+		startTimeTV = (TextView) findViewById(R.id.startTimeTV);
 
 	}
 	public void setEndTimeOnView(){
-		timePicker2=(TimePicker) findViewById(R.id.timePicker2);
+		//timePicker2=(TimePicker) findViewById(R.id.timePicker2);
+		endTimeTV = (TextView) findViewById(R.id.endTimeTV);
 
 	}
 
@@ -146,7 +142,7 @@ public class MainActivity extends Activity {
 		if( freq==1440)
 			return "Once a day";
 		else if(freq==720)
-			return "Every 12 hours";
+			return "Twice a day";
 		else if(freq==480)
 			return "Every 8 hours";
 		else if(freq==240)
@@ -155,8 +151,10 @@ public class MainActivity extends Activity {
 			return "Every 2 hours";
 		else if(freq==60)
 			return "Every hour";
+		else if(freq==30)
+			return "Every 30 minutes";
 		else if(freq==1)
-			return "Every minute";
+			return "EVery minute";
 		else
 			return null;
 	}
@@ -165,7 +163,7 @@ public class MainActivity extends Activity {
 
 		if( freq.equals("Once a day"))
 			return 1440;
-		else if( freq.equals("Every 12 hours"))
+		else if( freq.equals("Twice a day"))
 			return 720;
 		else if(freq.equals("Every 8 hours"))
 			return 480;
@@ -175,6 +173,8 @@ public class MainActivity extends Activity {
 			return 120;
 		else if(freq.equals("Every hour"))
 			return 60;
+		else if(freq.equals("Every 30 minutes"))
+			return 30;
 		else if(freq.equals("Every minute"))
 			return 1;
 		else
@@ -200,7 +200,9 @@ public class MainActivity extends Activity {
 		      configP(v);
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
-		      
+		      int i=(int) Math.random()*m.length;
+		      editor.putInt("ind", i);
+			  
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
 		      setSmsAlarm(hour1, hour2, minute1, minute2, freqInt);
 		      editor.commit();
@@ -246,6 +248,7 @@ public class MainActivity extends Activity {
 		      settingsPD(v); 
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, false);
+		      
 		      editor.commit(); 
 
 			  }
@@ -274,10 +277,22 @@ public class MainActivity extends Activity {
 			hour1 = selectedHour;
 			minute1 = selectedMinute;
  
-			// set current time into timepicker
-			timePicker1.setCurrentHour(hour1);
-			timePicker1.setCurrentMinute(minute1);
+			// set current time into the start time textview
+			
+			String m1;
+			String min1;
+			if(hour1>=12) m1="PM";
+			else m1="AM";
 
+
+			if(minute1<10) min1="0"+minute1;
+			else min1=""+minute1;
+
+
+			if(hour1!=0&&hour1!=12)
+				startTimeTV.setText("Start time is "+ (hour1%12)+":"+(min1)+m1);
+			else if(hour1==0||hour1==12)
+				startTimeTV.setText("Start time is "+ ("12")+":"+(min1)+m1);
 		}
 	};
 	private TimePickerDialog.OnTimeSetListener timePickerListener2 = 
@@ -287,9 +302,22 @@ public class MainActivity extends Activity {
 			hour2 = selectedHour;
 			minute2 = selectedMinute;
  
-			// set current time into timepicker
-			timePicker2.setCurrentHour(hour2);
-			timePicker2.setCurrentMinute(minute2);
+			// set current time into the end time textview
+			String m2;
+			String min2;
+
+			if(hour2>=12) m2="PM";
+			else m2="AM";
+
+
+			if(minute2<10) min2="0"+minute2;
+			else min2=""+minute2;
+
+
+			if(hour2!=0&&hour2!=12)
+				endTimeTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
+			else if(hour1==0||hour1==12)
+				endTimeTV.setText("End time is "+ ("12")+":"+(min2)+m2);
  
 		}
 	};
@@ -300,7 +328,7 @@ public class MainActivity extends Activity {
 		configPage.setVisibility(View.VISIBLE);
 		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = tMgr1.getLine1Number();
-		phoneTV.setText("You're phone number is: "+ phoneNumber);
+		phoneTV.setText(phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";
@@ -322,7 +350,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour2==0||hour2==12)
+		else if(hour1==0||hour1==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);
@@ -333,7 +361,7 @@ public class MainActivity extends Activity {
 		configPage.setVisibility(View.VISIBLE);
 		TelephonyManager tMgr1 =(TelephonyManager)getApplicationContext().getSystemService(Context.TELEPHONY_SERVICE);
 		String phoneNumber = tMgr1.getLine1Number();
-		phoneTV.setText("You're phone number is: "+ phoneNumber);
+		phoneTV.setText(phoneNumber);
 		String m1,m2;
 		String min1, min2;
 		if(hour1>=12) m1="PM";
@@ -355,7 +383,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour2==0||hour2==12)
+		else if(hour1==0||hour1==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);
@@ -364,13 +392,15 @@ public class MainActivity extends Activity {
 	{
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
+		
 	}
 	public void settingsPD(View v)
 	{
-		//Delete currently scheduled Encouragements
-		//manager.CancelAlarm(getApplicationContext());
+		startTimeTV.setText("");
+		endTimeTV.setText("");
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
+		
 	}
 
 	public void setSmsAlarm(int h1, int h2, int m1, int m2, int freq) {
@@ -381,6 +411,7 @@ public class MainActivity extends Activity {
 		manager.setFrequency(freq);
 		manager.SetAlarm(getApplicationContext());
 		SharedPreferences.Editor editor = setPrefs.edit();
+		
 		editor.putInt("hour1", h1);
 	    editor.putInt("hour2", h2);
 	    editor.putInt("minute1", m1);
@@ -401,9 +432,9 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public SmsAlarm loadAlarm(Context context){
-		
+
 		try{
 		FileInputStream fis = context.openFileInput(FILENAME);
 		ObjectInputStream is=new ObjectInputStream(fis);
@@ -414,7 +445,7 @@ public class MainActivity extends Activity {
 			e.printStackTrace();
 		}
 		is.close();
-		
+
 		}
 		catch(IOException e){
 			e.printStackTrace();
