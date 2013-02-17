@@ -200,8 +200,8 @@ public class MainActivity extends Activity {
 		      configP(v);
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, true);
-		      int i=(int) Math.random()*m.length;
-		      editor.putInt("ind", i);
+		      
+		    
 			  
 				//CALL SCHEDULE HERE USING PARAMETERS (int hour1, int minute1, int hour2, int minute2, String frequencySet)	
 		      setSmsAlarm(hour1, hour2, minute1, minute2, freqInt);
@@ -245,7 +245,10 @@ public class MainActivity extends Activity {
 
 			  //Delete currently scheduled Encouragements
 			  manager.CancelAlarm(getApplicationContext());
+			  //startTimeTV.setText("");
+			  //endTimeTV.setText("");
 		      settingsPD(v); 
+		      
 		      SharedPreferences.Editor editor = setPrefs.edit();
 		      editor.putBoolean(configScreenShownPref, false);
 		      
@@ -316,7 +319,7 @@ public class MainActivity extends Activity {
 
 			if(hour2!=0&&hour2!=12)
 				endTimeTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-			else if(hour1==0||hour1==12)
+			else if(hour2==0||hour2==12)
 				endTimeTV.setText("End time is "+ ("12")+":"+(min2)+m2);
  
 		}
@@ -350,7 +353,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour1==0||hour1==12)
+		else if(hour2==0||hour2==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);
@@ -383,7 +386,7 @@ public class MainActivity extends Activity {
 
 		if(hour2!=0&&hour2!=12)
 			currEndTV.setText("End time is "+ (hour2%12)+":"+(min2)+m2);
-		else if(hour1==0||hour1==12)
+		else if(hour2==0||hour2==12)
 			currEndTV.setText("End time is "+ ("12")+":"+(min2)+m2);
 
 		freqTV.setText("The Frequency is set at " + frequencySet);
@@ -396,8 +399,7 @@ public class MainActivity extends Activity {
 	}
 	public void settingsPD(View v)
 	{
-		startTimeTV.setText("");
-		endTimeTV.setText("");
+		
 		configPage.setVisibility(View.GONE);
 		settingsPage.setVisibility(View.VISIBLE);
 		

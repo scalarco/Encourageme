@@ -36,35 +36,36 @@ public class SmsAlarm extends BroadcastReceiver {
 		int currentHour = c.get(Calendar.HOUR_OF_DAY);
 		int currentMinute = c.get(Calendar.MINUTE);
 		int timeOption=timeOption(hour1, hour2, minute1, minute2);
-		setIndex(prefs.getInt("ind", 0));
 		
+		setIndex(prefs.getInt("ind", 0));
 		String[] messages = context.getResources().getStringArray(R.array.messages);
 		if(timeOption==1){
 			if (currentHour > hour1 && currentHour < hour2) {
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+			//manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 			}
 			else if (currentHour == hour1 && currentMinute > minute1) {
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 				}
 			else if (currentHour == hour2 && currentMinute < minute2) {
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 				}
 			else{}
 		}
 		else if(timeOption==2){
 			if ((currentHour > hour1 ) || (currentHour < hour2)) {
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 			}
 			else if((currentHour==hour1)&&currentMinute>minute1){
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 			}
 			else if((currentHour==hour2)&&currentMinute<minute2){
-				manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() *(messages.length-1))], null, null);
+				manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 			}
 			else{}
 		}
 		else{
-			manager.sendTextMessage(phoneNumber, null, messages[(int)(Math.random() * (messages.length-1))], null, null);
+			manager.sendTextMessage(phoneNumber, null, messages[index], null, null);
 		}
 		
 		index++;
@@ -96,6 +97,14 @@ public class SmsAlarm extends BroadcastReceiver {
         Intent i = new Intent(context, SmsAlarm.class);
         i.setAction("com.android.encourageme.SMS_ALARM");
         PendingIntent pi = PendingIntent.getBroadcast(context, 0, i, 0);
+        
+        String[] messages = context.getResources().getStringArray(R.array.messages);
+        int index=(int) (Math.random()*messages.length);
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        SharedPreferences.Editor editor = prefs.edit();
+		editor.putInt("ind", index);
+		editor.commit();
+        
         am.setRepeating(AlarmManager.RTC_WAKEUP, System.currentTimeMillis(), 1000 * 60 * frequency, pi); //millisecond * second * minutes
 	}
 
